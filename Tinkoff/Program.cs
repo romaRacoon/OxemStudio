@@ -50,10 +50,10 @@ namespace Tinkoff
         private List<Product> _products = new List<Product>();
         private List<Animal> _animals = new List<Animal>();
 
+        private int _template = 1;
+
         public void Initialize()
         {
-            Random random = new Random();
-
             int registrationNumber;
 
             int cowsAmount = 10;
@@ -61,14 +61,18 @@ namespace Tinkoff
 
             for (int i = 0; i < cowsAmount; i++)
             {
-                registrationNumber = random.Next(0, 1000);
-                _animals.Add(new Cow(registrationNumber, 8, 13, "Корова"));
+                registrationNumber = _template;
+                _animals.Add(new Cow(registrationNumber, 8, 13));
+
+                _template++;
             }
 
             for (int i = 0; i < chickenAmount; i++)
             {
-                registrationNumber = random.Next(0, 1000);
-                _animals.Add(new Chicken(registrationNumber, 0, 2, "Курица"));
+                registrationNumber = _template;
+                _animals.Add(new Chicken(registrationNumber, 0, 2));
+
+                _template++;
             }
         }
 
@@ -105,16 +109,18 @@ namespace Tinkoff
 
         public void AddNewAnimals(int cowsAmount, int chickenAmount)
         {
-            Random random = new Random();
-
             for (int i = 0; i < chickenAmount; i++)
             {
-                _animals.Add(new Chicken(random.Next(0, 1000), 0, 2, "Курица"));
+                _animals.Add(new Chicken(_template, 0, 2));
+
+                _template++;
             }
 
             for (int i = 0; i < cowsAmount; i++)
             {
-                _animals.Add(new Cow(random.Next(0, 1000), 8, 13, "Корова"));
+                _animals.Add(new Cow(_template, 8, 13));
+
+                _template++;
             }
         }
     }
@@ -140,43 +146,56 @@ namespace Tinkoff
 
     class Chicken : Animal
     {
-        public Chicken(int registrationNumber, int minValueProductCollection, int maxValueProductCollection, string type) : base(registrationNumber, minValueProductCollection, maxValueProductCollection, type) { }
+        public Chicken(int registrationNumber, int minValueProductCollection, int maxValueProductCollection) : base(registrationNumber, minValueProductCollection, maxValueProductCollection) { }
     }
 
     class Cow : Animal
     {
-        public Cow(int registrationNumber, int minValueProductCollection, int maxValueProductCollection, string type) : base(registrationNumber, minValueProductCollection, maxValueProductCollection, type) { }
+        public Cow(int registrationNumber, int minValueProductCollection, int maxValueProductCollection) : base(registrationNumber, minValueProductCollection, maxValueProductCollection) { }
     }
 
     class Animal
     {
+        private int _minValueProductCollection = -1;
+        private int _maxValueProductCollection = -1;
         private int _registrationNumber;
-        private int _minValueProductCollection;
-        private int _maxValueProductCollection;
-        private string _type;
 
-        public string Type => _type;
         public int RegistrationNumber => _registrationNumber;
 
-        public Animal(int registrationNumber, int minValueProductCollection, int maxValueProductCollection, string type)
+        public Animal(int registrationNumber)
+        {
+            _registrationNumber = registrationNumber;
+        }
+
+        public Animal(int registrationNumber,int minValueProductCollection,int maxValueProductCollection)
         {
             _registrationNumber = registrationNumber;
             _minValueProductCollection = minValueProductCollection;
             _maxValueProductCollection = maxValueProductCollection;
-            _type = type;
         }
 
         public int CollectProduct()
         {
             Random random = new Random();
-            int productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
+            int productAmount = 0;
 
-            return productAmount;
+            if (_maxValueProductCollection != -1)
+            {
+                productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
+
+                return productAmount;
+            }
+            else
+            {
+                productAmount = random.Next(1, 30);
+
+                return productAmount;
+            }
         }
 
         public void Information()
         {
-            Console.WriteLine($"{_type} - регистрационный номер {_registrationNumber}");
+            Console.WriteLine($"{GetType().Name} - регистрационный номер {_registrationNumber}");
         }
     }
 }
