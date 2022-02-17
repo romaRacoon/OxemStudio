@@ -1,0 +1,13 @@
+D:\РАБОТА\Tinkoff\Tinkoff\bin\Debug\netcoreapp3.1\Tinkoff.exe
+D:\РАБОТА\Tinkoff\Tinkoff\bin\Debug\netcoreapp3.1\Tinkoff.deps.json
+D:\РАБОТА\Tinkoff\Tinkoff\bin\Debug\netcoreapp3.1\Tinkoff.runtimeconfig.json
+D:\РАБОТА\Tinkoff\Tinkoff\bin\Debug\netcoreapp3.1\Tinkoff.runtimeconfig.dev.json
+D:\РАБОТА\Tinkoff\Tinkoff\bin\Debug\netcoreapp3.1\Tinkoff.dll
+D:\РАБОТА\Tinkoff\Tinkoff\bin\Debug\netcoreapp3.1\Tinkoff.pdb
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.csprojAssemblyReference.cache
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.AssemblyInfoInputs.cache
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.AssemblyInfo.cs
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.csproj.CoreCompileInputs.cache
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.dll
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.pdb
+D:\РАБОТА\Tinkoff\Tinkoff\obj\Debug\netcoreapp3.1\Tinkoff.genruntimeconfig.cache
