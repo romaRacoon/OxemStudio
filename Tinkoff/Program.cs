@@ -36,7 +36,7 @@ namespace Tinkoff
 
             Console.WriteLine(_stable.GetAllAmountProducts());
 
-            _stable.AddNewAnimals(1, 5);
+            _stable.AddNewAnimals();
             _stable.Information();
 
             CollectProduct();
@@ -56,21 +56,16 @@ namespace Tinkoff
         {
             int registrationNumber;
 
-            int cowsAmount = 10;
-            int chickenAmount = 20;
+            int animalsAmount = 30;
 
-            for (int i = 0; i < cowsAmount; i++)
+            for (int i = 0; i < animalsAmount; i++)
             {
                 registrationNumber = _template;
-                _animals.Add(new Cow(registrationNumber, 8, 13));
 
-                _template++;
-            }
-
-            for (int i = 0; i < chickenAmount; i++)
-            {
-                registrationNumber = _template;
-                _animals.Add(new Chicken(registrationNumber, 0, 2));
+                if (i < 9)
+                    _animals.Add(new Animal(registrationNumber, 8, 13, "Корова"));
+                else
+                    _animals.Add(new Animal(registrationNumber, 0, 2, "Курица"));
 
                 _template++;
             }
@@ -107,18 +102,16 @@ namespace Tinkoff
             return allAmount;
         }
 
-        public void AddNewAnimals(int cowsAmount, int chickenAmount)
+        public void AddNewAnimals()
         {
-            for (int i = 0; i < chickenAmount; i++)
-            {
-                _animals.Add(new Chicken(_template, 0, 2));
+            int animalsAmount = 6;
 
-                _template++;
-            }
-
-            for (int i = 0; i < cowsAmount; i++)
+            for (int i = 0; i < animalsAmount; i++)
             {
-                _animals.Add(new Cow(_template, 8, 13));
+                if (i < 1)
+                    _animals.Add(new Animal(_template, 8, 13, "Корова"));
+                else
+                    _animals.Add(new Animal(_template, 0, 2, "Курица"));
 
                 _template++;
             }
@@ -144,34 +137,28 @@ namespace Tinkoff
         }
     }
 
-    class Chicken : Animal
-    {
-        public Chicken(int registrationNumber, int minValueProductCollection, int maxValueProductCollection) : base(registrationNumber, minValueProductCollection, maxValueProductCollection) { }
-    }
-
-    class Cow : Animal
-    {
-        public Cow(int registrationNumber, int minValueProductCollection, int maxValueProductCollection) : base(registrationNumber, minValueProductCollection, maxValueProductCollection) { }
-    }
-
     class Animal
     {
         private int _minValueProductCollection = -1;
         private int _maxValueProductCollection = -1;
         private int _registrationNumber;
+        private string _type;
 
+        public string Type => _type;
         public int RegistrationNumber => _registrationNumber;
 
-        public Animal(int registrationNumber)
+        public Animal(int registrationNumber, string type)
         {
             _registrationNumber = registrationNumber;
+            _type = type;
         }
 
-        public Animal(int registrationNumber,int minValueProductCollection,int maxValueProductCollection)
+        public Animal(int registrationNumber,int minValueProductCollection,int maxValueProductCollection, string type)
         {
             _registrationNumber = registrationNumber;
             _minValueProductCollection = minValueProductCollection;
             _maxValueProductCollection = maxValueProductCollection;
+            _type = type;
         }
 
         public int CollectProduct()
@@ -195,7 +182,7 @@ namespace Tinkoff
 
         public void Information()
         {
-            Console.WriteLine($"{GetType().Name} - регистрационный номер {_registrationNumber}");
+            Console.WriteLine($"{_type} - регистрационный номер {_registrationNumber}");
         }
     }
 }
