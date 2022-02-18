@@ -16,7 +16,7 @@ namespace Tinkoff
     class Farm
     {
         private string[] _weekDay = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье" };
-        private Stable _stable = new Stable();
+        private Stable _stable = new Stable(new AnimalFactory());
 
         private void CollectProduct()
         {
@@ -47,10 +47,28 @@ namespace Tinkoff
 
     class Stable
     {
+        private AnimalFactory _animalFactory;
+
         private List<Product> _products = new List<Product>();
         private List<Animal> _animals = new List<Animal>();
 
         private int _template = 1;
+
+        public Stable(AnimalFactory animalFactory)
+        {
+            _animalFactory = animalFactory;
+        }
+
+        public void CollectProduct()
+        {
+            Random random = new Random();
+            var animal = _animals[random.Next(0, _animals.Count)];
+            int product = animal.GetProduct();
+
+            Console.WriteLine($"Собрано {product} продукта у животного под регистрационным номером {animal.RegistrationNumber}");
+
+            _products.Add(new Product(animal, product));
+        }
 
         public void Initialize()
         {
@@ -63,23 +81,12 @@ namespace Tinkoff
                 registrationNumber = _template;
 
                 if (i < 9)
-                    _animals.Add(new Animal(registrationNumber, 8, 13, "Корова"));
+                    _animals.Add(_animalFactory.CreateCow(8, 13, registrationNumber));
                 else
-                    _animals.Add(new Animal(registrationNumber, 0, 2, "Курица"));
+                    _animals.Add(_animalFactory.CreateChicken(0, 2, registrationNumber));
 
                 _template++;
             }
-        }
-
-        public void CollectProduct()
-        {
-            Random random = new Random();
-            var animal = _animals[random.Next(0, _animals.Count)];
-            int product = animal.CollectProduct();
-
-            Console.WriteLine($"Собрано {product} продукта у животного под регистрационным номером {animal.RegistrationNumber}");
-
-            _products.Add(new Product(animal, product));
         }
 
         public void Information()
@@ -109,9 +116,9 @@ namespace Tinkoff
             for (int i = 0; i < animalsAmount; i++)
             {
                 if (i < 1)
-                    _animals.Add(new Animal(_template, 8, 13, "Корова"));
+                    _animals.Add(_animalFactory.CreateCow(8, 13, _template));
                 else
-                    _animals.Add(new Animal(_template, 0, 2, "Курица"));
+                    _animals.Add(_animalFactory.CreateChicken(0, 2, _template));
 
                 _template++;
             }
@@ -137,52 +144,86 @@ namespace Tinkoff
         }
     }
 
-    class Animal
+    class Chicken : Animal
     {
-        private int _minValueProductCollection = -1;
-        private int _maxValueProductCollection = -1;
-        private int _registrationNumber;
-        private string _type;
+        private int _minValueProductCollection;
+        private int _maxValueProductCollection;
 
-        public string Type => _type;
-        public int RegistrationNumber => _registrationNumber;
-
-        public Animal(int registrationNumber, string type)
+        public Chicken(int minValueProductCollection, int maxValueProductCollection, int registrationNumber) : base(registrationNumber)
         {
-            _registrationNumber = registrationNumber;
-            _type = type;
-        }
-
-        public Animal(int registrationNumber,int minValueProductCollection,int maxValueProductCollection, string type)
-        {
-            _registrationNumber = registrationNumber;
             _minValueProductCollection = minValueProductCollection;
             _maxValueProductCollection = maxValueProductCollection;
-            _type = type;
         }
 
-        public int CollectProduct()
+        public override int GetProduct()
         {
             Random random = new Random();
             int productAmount = 0;
 
-            if (_maxValueProductCollection != -1)
-            {
-                productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
+            productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
 
-                return productAmount;
-            }
-            else
-            {
-                productAmount = random.Next(1, 30);
-
-                return productAmount;
-            }
+            return productAmount;
         }
+    }
+
+    class Cow : Animal
+    {
+        private int _minValueProductCollection;
+        private int _maxValueProductCollection;
+
+        public Cow(int minValueProductCollection, int maxValueProductCollection, int registrationNumber) : base(registrationNumber)
+        {
+            _minValueProductCollection = minValueProductCollection;
+            _maxValueProductCollection = maxValueProductCollection;
+        }
+
+        public override int GetProduct()
+        {
+            Random random = new Random();
+            int productAmount = 0;
+
+            productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
+
+            return productAmount;
+        }
+    }
+
+    abstract class Animal
+    {
+        private int _registrationNumber;
+
+        public int RegistrationNumber => _registrationNumber;
+
+        public Animal(int registrationNumber)
+        {
+            _registrationNumber = registrationNumber;
+        }
+
+        public abstract int GetProduct();
 
         public void Information()
         {
-            Console.WriteLine($"{_type} - регистрационный номер {_registrationNumber}");
+            Console.WriteLine($"{GetType().Name} - регистрационный номер {_registrationNumber}");
         }
+    }
+
+    class AnimalFactory : IAnimalFactory
+    {
+        public Animal CreateChicken(int minValueProductCollection, int maxValueProductCollection, int registrationNumber)
+        {
+            return new Chicken(minValueProductCollection, maxValueProductCollection, registrationNumber);
+        }
+
+        public Animal CreateCow(int minValueProductCollection, int maxValueProductCollection, int registrationNumber)
+        {
+            return new Cow(minValueProductCollection, maxValueProductCollection, registrationNumber);
+        }
+    }
+
+    interface IAnimalFactory
+    {
+        public Animal CreateCow(int minValueProductCollection, int maxValueProductCollection, int registrationNumber);
+
+        public Animal CreateChicken(int minValueProductCollection, int maxValueProductCollection, int registrationNumber);
     }
 }
