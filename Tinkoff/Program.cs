@@ -36,7 +36,12 @@ namespace Tinkoff
 
             Console.WriteLine(_stable.GetAllAmountProducts());
 
-            _stable.AddNewAnimals();
+            for (int i = 0; i < 5; i++)
+            {
+                _stable.AddNewChicken();
+            }
+
+            _stable.AddNewCow();
             _stable.Information();
 
             CollectProduct();
@@ -81,9 +86,9 @@ namespace Tinkoff
                 registrationNumber = _template;
 
                 if (i < 9)
-                    _animals.Add(_animalFactory.CreateCow(8, 13, registrationNumber));
+                    _animals.Add(_animalFactory.CreateCow(registrationNumber));
                 else
-                    _animals.Add(_animalFactory.CreateChicken(0, 2, registrationNumber));
+                    _animals.Add(_animalFactory.CreateChicken(registrationNumber));
 
                 _template++;
             }
@@ -109,19 +114,18 @@ namespace Tinkoff
             return allAmount;
         }
 
-        public void AddNewAnimals()
+        public void AddNewChicken()
         {
-            int animalsAmount = 6;
+            _animals.Add(_animalFactory.CreateChicken(_template));
 
-            for (int i = 0; i < animalsAmount; i++)
-            {
-                if (i < 1)
-                    _animals.Add(_animalFactory.CreateCow(8, 13, _template));
-                else
-                    _animals.Add(_animalFactory.CreateChicken(0, 2, _template));
+            _template++;
+        }
 
-                _template++;
-            }
+        public void AddNewCow()
+        {
+            _animals.Add(_animalFactory.CreateCow(_template));
+
+            _template++;
         }
     }
 
@@ -146,21 +150,14 @@ namespace Tinkoff
 
     class Chicken : Animal
     {
-        private int _minValueProductCollection;
-        private int _maxValueProductCollection;
-
-        public Chicken(int minValueProductCollection, int maxValueProductCollection, int registrationNumber) : base(registrationNumber)
-        {
-            _minValueProductCollection = minValueProductCollection;
-            _maxValueProductCollection = maxValueProductCollection;
-        }
+        public Chicken(int registrationNumber) : base(registrationNumber) { }
 
         public override int GetProduct()
         {
             Random random = new Random();
             int productAmount = 0;
 
-            productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
+            productAmount = random.Next(0, 2);
 
             return productAmount;
         }
@@ -168,21 +165,14 @@ namespace Tinkoff
 
     class Cow : Animal
     {
-        private int _minValueProductCollection;
-        private int _maxValueProductCollection;
-
-        public Cow(int minValueProductCollection, int maxValueProductCollection, int registrationNumber) : base(registrationNumber)
-        {
-            _minValueProductCollection = minValueProductCollection;
-            _maxValueProductCollection = maxValueProductCollection;
-        }
+        public Cow(int registrationNumber) : base(registrationNumber) { }
 
         public override int GetProduct()
         {
             Random random = new Random();
             int productAmount = 0;
 
-            productAmount = random.Next(_minValueProductCollection, _maxValueProductCollection);
+            productAmount = random.Next(8, 12);
 
             return productAmount;
         }
@@ -209,21 +199,21 @@ namespace Tinkoff
 
     class AnimalFactory : IAnimalFactory
     {
-        public Animal CreateChicken(int minValueProductCollection, int maxValueProductCollection, int registrationNumber)
+        public Animal CreateChicken(int registrationNumber)
         {
-            return new Chicken(minValueProductCollection, maxValueProductCollection, registrationNumber);
+            return new Chicken(registrationNumber);
         }
 
-        public Animal CreateCow(int minValueProductCollection, int maxValueProductCollection, int registrationNumber)
+        public Animal CreateCow(int registrationNumber)
         {
-            return new Cow(minValueProductCollection, maxValueProductCollection, registrationNumber);
+            return new Cow(registrationNumber);
         }
     }
 
     interface IAnimalFactory
     {
-        public Animal CreateCow(int minValueProductCollection, int maxValueProductCollection, int registrationNumber);
+        public Animal CreateCow(int registrationNumber);
 
-        public Animal CreateChicken(int minValueProductCollection, int maxValueProductCollection, int registrationNumber);
+        public Animal CreateChicken(int registrationNumber);
     }
 }
