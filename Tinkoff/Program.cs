@@ -7,86 +7,58 @@ namespace Tinkoff
     {
         static void Main(string[] args)
         {
+            int registationNumber = 1;
+
             Farm farm = new Farm();
 
-            farm.Work();
+            for (int i = 0; i < 10; i++)
+            {
+                farm.AddAnimal(new Cow(registationNumber));
+                registationNumber++;
+            }
+            for (int i = 0; i < 20; i++)
+            {
+                farm.AddAnimal(new Chicken(registationNumber));
+                registationNumber++;
+            }
+
+            farm.Information();
+            farm.CollectProduct();
+
+            Console.WriteLine(farm.GetAllAmountProducts());
+
+            for (int i = 0; i < 5; i++)
+            {
+                farm.AddAnimal(new Chicken(registationNumber));
+                registationNumber++;
+            }
+
+            farm.AddAnimal(new Cow(registationNumber));
+            farm.Information();
+
+            farm.CollectProduct();
+
+            Console.WriteLine(farm.GetAllAmountProducts());
         }
     }
 
     class Farm
     {
-        private string[] _weekDay = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье" };
-        private Stable _stable = new Stable();
-
-        private void CollectProduct()
-        {
-            for (int i = 0; i < _weekDay.Length; i++)
-            {
-                Console.WriteLine(_weekDay[i]);
-                _stable.CollectProduct();
-            }
-        }
-
-        public void Work()
-        {
-            _stable.Initialize();
-            _stable.Information();
-
-            CollectProduct();
-
-            Console.WriteLine(_stable.GetAllAmountProducts());
-
-            for (int i = 0; i < 5; i++)
-            {
-                _stable.AddAnimal(new Chicken(_stable.Template));
-            }
-
-            _stable.AddAnimal(new Cow(_stable.Template));
-
-            _stable.Information();
-
-            CollectProduct();
-
-            Console.WriteLine(_stable.GetAllAmountProducts());
-        }
-    }
-
-    class Stable
-    {
         private List<Product> _products = new List<Product>();
         private List<Animal> _animals = new List<Animal>();
-
-        private int _template = 1;
-
-        public int Template => _template;
 
         public void CollectProduct()
         {
             Random random = new Random();
-            var animal = _animals[random.Next(0, _animals.Count)];
-            int product = animal.GetProduct();
 
-            Console.WriteLine($"Собрано {product} продукта у животного под регистрационным номером {animal.RegistrationNumber}");
-
-            _products.Add(new Product(animal, product));
-        }
-
-        public void Initialize()
-        {
-            int registrationNumber;
-
-            int animalsAmount = 30;
-
-            for (int i = 0; i < animalsAmount; i++)
+            for (int i = 0; i < 7; i++)
             {
-                registrationNumber = _template;
+                var animal = _animals[random.Next(0,_animals.Count)];
+                int product = animal.GetProduct();
 
-                if (i < 9)
-                    AddAnimal(new Cow(registrationNumber));
-                else
-                    AddAnimal(new Chicken(registrationNumber));
+                Console.WriteLine($"Собрано {product} продукта у животного под регистрационным номером {animal.RegistrationNumber}");
 
-                _template++;
+                _products.Add(new Product(animal, product));
             }
         }
 
@@ -114,8 +86,6 @@ namespace Tinkoff
         public void AddAnimal(Animal animal)
         {
             _animals.Add(animal);
-
-            _template++;
         }
     }
 
@@ -134,7 +104,7 @@ namespace Tinkoff
         
         public void Information()
         {
-            Console.WriteLine($"Количество продукта {_amount} у животного в регистрационным номером {_animal.RegistrationNumber}");
+            Console.WriteLine($"Количество продукта {_amount} у животного c регистрационным номером {_animal.RegistrationNumber}");
         }
     }
 
@@ -145,11 +115,8 @@ namespace Tinkoff
         public override int GetProduct()
         {
             Random random = new Random();
-            int productAmount = 0;
 
-            productAmount = random.Next(0, 2);
-
-            return productAmount;
+            return random.Next(0, 2);
         }
     }
 
@@ -160,11 +127,8 @@ namespace Tinkoff
         public override int GetProduct()
         {
             Random random = new Random();
-            int productAmount = 0;
 
-            productAmount = random.Next(8, 12);
-
-            return productAmount;
+            return random.Next(8, 13);
         }
     }
 
