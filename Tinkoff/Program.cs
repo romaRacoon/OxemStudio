@@ -16,7 +16,7 @@ namespace Tinkoff
     class Farm
     {
         private string[] _weekDay = { "Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота", "Воскресенье" };
-        private Stable _stable = new Stable(new AnimalFactory());
+        private Stable _stable = new Stable();
 
         private void CollectProduct()
         {
@@ -38,10 +38,11 @@ namespace Tinkoff
 
             for (int i = 0; i < 5; i++)
             {
-                _stable.AddNewChicken();
+                _stable.AddAnimal(new Chicken(_stable.Template));
             }
 
-            _stable.AddNewCow();
+            _stable.AddAnimal(new Cow(_stable.Template));
+
             _stable.Information();
 
             CollectProduct();
@@ -52,17 +53,12 @@ namespace Tinkoff
 
     class Stable
     {
-        private AnimalFactory _animalFactory;
-
         private List<Product> _products = new List<Product>();
         private List<Animal> _animals = new List<Animal>();
 
         private int _template = 1;
 
-        public Stable(AnimalFactory animalFactory)
-        {
-            _animalFactory = animalFactory;
-        }
+        public int Template => _template;
 
         public void CollectProduct()
         {
@@ -86,9 +82,9 @@ namespace Tinkoff
                 registrationNumber = _template;
 
                 if (i < 9)
-                    _animals.Add(_animalFactory.CreateCow(registrationNumber));
+                    AddAnimal(new Cow(registrationNumber));
                 else
-                    _animals.Add(_animalFactory.CreateChicken(registrationNumber));
+                    AddAnimal(new Chicken(registrationNumber));
 
                 _template++;
             }
@@ -114,16 +110,10 @@ namespace Tinkoff
             return allAmount;
         }
 
-        public void AddNewChicken()
-        {
-            _animals.Add(_animalFactory.CreateChicken(_template));
 
-            _template++;
-        }
-
-        public void AddNewCow()
+        public void AddAnimal(Animal animal)
         {
-            _animals.Add(_animalFactory.CreateCow(_template));
+            _animals.Add(animal);
 
             _template++;
         }
@@ -195,25 +185,5 @@ namespace Tinkoff
         {
             Console.WriteLine($"{GetType().Name} - регистрационный номер {_registrationNumber}");
         }
-    }
-
-    class AnimalFactory : IAnimalFactory
-    {
-        public Animal CreateChicken(int registrationNumber)
-        {
-            return new Chicken(registrationNumber);
-        }
-
-        public Animal CreateCow(int registrationNumber)
-        {
-            return new Cow(registrationNumber);
-        }
-    }
-
-    interface IAnimalFactory
-    {
-        public Animal CreateCow(int registrationNumber);
-
-        public Animal CreateChicken(int registrationNumber);
     }
 }
