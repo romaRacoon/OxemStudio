@@ -45,9 +45,7 @@ namespace Tinkoff
 
     class Farm
     {
-        private List<int> _eggs = new List<int>();
-        private List<int> _milk = new List<int>();
-
+        private List<int> _products = new List<int>();
         private List<Animal> _animals = new List<Animal>();
 
         public void CollectProduct()
@@ -61,14 +59,7 @@ namespace Tinkoff
 
                 Console.WriteLine($"Собрано {product} продукта у животного под регистрационным номером {animal.RegistrationNumber}");
 
-                if(animal is Cow)
-                {
-                    _milk.Add(product);
-                }
-                else if(animal is Chicken)
-                {
-                    _eggs.Add(product);
-                }
+                _products.Add(product);
             }
         }
 
@@ -82,22 +73,14 @@ namespace Tinkoff
 
         public void ShowAllAmountProducts()
         {
-            int milkAmount = 0;
-            int eggsAmount = 0;
+            int productsAmount = 0;
 
-            for (int i = 0; i < _eggs.Count; i++)
+            for (int i = 0; i < _products.Count; i++)
             {
-                eggsAmount += _eggs[i];
+                productsAmount += _products[i];
             }
 
-            Console.WriteLine($"Всего собрано яиц {eggsAmount}");
-
-            for (int i = 0; i < _milk.Count; i++)
-            {
-                milkAmount += _milk[i];
-            }
-
-            Console.WriteLine($"Всего собрано молока {milkAmount}");
+            Console.WriteLine($"Всего собрано продукции - {productsAmount}");
         }
 
 
