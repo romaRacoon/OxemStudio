@@ -23,9 +23,10 @@ namespace Tinkoff
             }
 
             farm.Information();
+
             farm.CollectProduct();
 
-            Console.WriteLine(farm.GetAllAmountProducts());
+            farm.ShowAllAmountProducts();
 
             for (int i = 0; i < 5; i++)
             {
@@ -38,27 +39,36 @@ namespace Tinkoff
 
             farm.CollectProduct();
 
-            Console.WriteLine(farm.GetAllAmountProducts());
+            farm.ShowAllAmountProducts();
         }
     }
 
     class Farm
     {
-        private List<Product> _products = new List<Product>();
+        private List<int> _eggs = new List<int>();
+        private List<int> _milk = new List<int>();
+
         private List<Animal> _animals = new List<Animal>();
 
         public void CollectProduct()
         {
             Random random = new Random();
 
-            for (int i = 0; i < 7; i++)
+            for (int i = 0; i < _animals.Count; i++)
             {
-                var animal = _animals[random.Next(0,_animals.Count)];
+                var animal = _animals[i];
                 int product = animal.GetProduct();
 
                 Console.WriteLine($"Собрано {product} продукта у животного под регистрационным номером {animal.RegistrationNumber}");
 
-                _products.Add(new Product(animal, product));
+                if(animal is Cow)
+                {
+                    _milk.Add(product);
+                }
+                else if(animal is Chicken)
+                {
+                    _eggs.Add(product);
+                }
             }
         }
 
@@ -70,41 +80,30 @@ namespace Tinkoff
             }
         }
 
-        public int GetAllAmountProducts()
+        public void ShowAllAmountProducts()
         {
-            int allAmount = 0;
+            int milkAmount = 0;
+            int eggsAmount = 0;
 
-            for (int i = 0; i < _products.Count; i++)
+            for (int i = 0; i < _eggs.Count; i++)
             {
-                allAmount += _products[i].Amount;
+                eggsAmount += _eggs[i];
             }
 
-            return allAmount;
+            Console.WriteLine($"Всего собрано яиц {eggsAmount}");
+
+            for (int i = 0; i < _milk.Count; i++)
+            {
+                milkAmount += _milk[i];
+            }
+
+            Console.WriteLine($"Всего собрано молока {milkAmount}");
         }
 
 
         public void AddAnimal(Animal animal)
         {
             _animals.Add(animal);
-        }
-    }
-
-    class Product
-    {
-        private Animal _animal;
-        private int _amount;
-
-        public int Amount => _amount;
-
-        public Product(Animal animal,int amount)
-        {
-            _animal = animal;
-            _amount = amount;
-        }
-        
-        public void Information()
-        {
-            Console.WriteLine($"Количество продукта {_amount} у животного c регистрационным номером {_animal.RegistrationNumber}");
         }
     }
 
